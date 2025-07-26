@@ -31,13 +31,11 @@ public class StockDataImportServiceImpl implements StockDataImportService {
         this.stockRepoReactive = stockRepoReactive;
     }
 
-    @PostConstruct
-    void setup() {
-        log.info("Getting full stocklist...");
-        //fetchAndSaveStocks();
-    }
 
-
+    /*
+      This is a returns a massive amount of data that cannot be streamed thanks to api response headers (thanks twelvedata).
+      ISO-8601 S=start time offset H=period time in this case up to 3 hours after the registered start time of 2am local time.
+     */
     @Recurring(id = "full-stock-list-download-carbon-aware", cron = "0 0 2 * * * [PT0S/PT3H]")
     @Job(name = "Download full stock list from api.twelvedata.com")
     @Override
